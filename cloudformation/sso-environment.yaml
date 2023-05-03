@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Configures the SSO for the Jupyter runbooks
+Resources:
+  ViewOnlyPermissionSet:
+    Type: AWS::SSO::PermissionSet
+    Properties: 
+      Description: Read-only permissions for Jupyter incident response notebooks
+      InstanceArn: !Ref SsoInstanceArn
+      ManagedPolicies: 
+        - arn:aws:iam::aws:policy/job-function/ViewOnlyAccess
+        - arn:aws:iam::aws:policy/AmazonAthenaFullAccess
+      Name: Jupyter-IR-ViewOnly
+      SessionDuration: PT2H
+      InlinePolicy: '{
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetObject"
+                ],
+                "Resource":[
+                  "arn:aws:s3:::organization-logging-*",
+                  "arn:aws:s3:::aws-controltower-logs-*"
+                  ]
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "kms:Decrypt"
+                ],
+                "Resource": "*",
+                "Condition": {
+                  "ForAnyValue:StringLike": {
+                    "kms:ResourceAliases": "alias/organizational-logging*"
+                  }
+                }
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "sts:AssumeRole"
+                ],
+                "Resource":[
+                  "arn:aws:iam::*:role/Jupyter-IR-ViewOnly"
+                  ]
+            }
+          ]
+      }'
+  SysAdminPermissionSet:
+    Type: AWS::SSO::PermissionSet
+    Properties: 
+      Description: SysAdmin permissions for Jupyter incident response notebooks
+      InstanceArn: !Ref SsoInstanceArn
+      ManagedPolicies: 
+        - arn:aws:iam::aws:policy/job-function/SystemAdministrator
+      Name: Jupyter-IR-SysAdminAccess
+      SessionDuration: PT2H
+      InlinePolicy: '{
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "sts:AssumeRole"
+                ],
+                "Resource":[
+                  "arn:aws:iam::*:role/Jupyter-IR-SysAdminAccess"
+                  ]
+            }
+          ]
+      }'
+  AdministratorPermissionSet:
+    Type: AWS::SSO::PermissionSet
+    Properties: 
+      Description: Administrator permissions for Jupyter incident response notebooks
+      InstanceArn: !Ref SsoInstanceArn
+      ManagedPolicies: 
+        - arn:aws:iam::aws:policy/AdministratorAccess
+      Name: Jupyter-IR-AdministratorAccess
+      SessionDuration: PT2H
+

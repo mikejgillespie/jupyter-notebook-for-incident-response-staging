@@ -1,0 +1,10 @@
+setup.py
+jupyterawstools/__init__.py
+jupyterawstools/athena.py
+jupyterawstools/jupyterauth.py
+jupyterawstools/utils.py
+jupyterawstools.egg-info/PKG-INFO
+jupyterawstools.egg-info/SOURCES.txt
+jupyterawstools.egg-info/dependency_links.txt
+jupyterawstools.egg-info/requires.txt
+jupyterawstools.egg-info/top_level.txt
