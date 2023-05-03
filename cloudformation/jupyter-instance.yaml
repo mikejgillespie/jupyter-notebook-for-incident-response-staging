@@ -34,7 +34,7 @@ Resources:
 
             sudo -u ec2-user -i <<'EOF'
             cd /home/ec2-user/SageMaker
-            git clone https://github.com/mikejgillespie/aws-incident-response-playbooks
+            git clone https://github.com/mikejgillespie/jupyter-notebook-for-incident-response-staging
             EOF
       OnStart:
       - Content:
@@ -64,12 +64,11 @@ Resources:
 
             sudo -u ec2-user -i <<'EOF'
 
-            PACKAGE=pyathena
             ENVIRONMENT=python3
             source /home/ec2-user/anaconda3/bin/activate "$ENVIRONMENT"
             rm  /home/ec2-user/anaconda3/envs/python3/bin/aws
             pip install --upgrade "$PACKAGE"
-            pip install -e /home/ec2-user/SageMaker/aws-incident-response-playbooks/jupyter/jupyter-ir-tools
+            pip install -e /home/ec2-user/SageMaker/aws-incident-response-playbooks/jupyter/jupyterawstools
             source /home/ec2-user/anaconda3/bin/deactivate
 
 
