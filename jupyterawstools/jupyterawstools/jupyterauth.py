@@ -39,11 +39,6 @@ if sso_start_url != "":
 elif len(linked_roles) > 0:
     auth_type = "ASSUME_ROLE"
 
-auth_type = "ASSUME_ROLE"
-#auth_type = "DEFAULT"
-#default_account = "383086473915"
-#default_role = "Jupyter-IR-ViewOnly"
-
 def parse_role_arn(arn):
     arn_info = arn.split(':')
     role_name = arn_info[5][5:]

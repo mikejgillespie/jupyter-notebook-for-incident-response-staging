@@ -6,19 +6,23 @@ Parameters:
   SsoUrl:
     Type: String
     Default: ''
-    Description: The URL for the IAM Identity Center (SSO)
+    Description: (Optional) The URL for the IAM Identity Center (SSO)
   SsoRegion:
     Type: String
     Default: ''
-    Description: The Region for the IAM Identity Center (SSO)
+    Description: (Optional) The Region for the IAM Identity Center (SSO)
   LinkedRoles:
     Type: String
     Default: ''
-    Description: A comma separated list of roles urns in that this notebook will have access via role assumption.
+    Description: (Optional) A comma separated list of roles urns in that this notebook will have access via role assumption.
   DefaultRole:
     Type: String
     Default: ''
-    Description: (Optional) The default role ARN that this account will have access.
+    Description: (Optional) The default role name that the notebook will access.
+  DefaultAccount:
+    Type: String
+    Default: ''
+    Description: (Optional) The default account that the notebook will access.
 Conditions:
   AssumeRolePermission: !Not [!Equals [!Ref LinkedRoles, '']]
 Resources:
@@ -59,6 +63,7 @@ Resources:
             touch /etc/profile.d/jupyter-env.sh
             echo "export LINKED_ROLES=${LinkedRoles}" >> /etc/profile.d/jupyter-env.sh
             echo "export DEFAULT_ROLE=${DefaultRole}" >> /etc/profile.d/jupyter-env.sh
+            echo "export DEFAULT_ACCOUNT=${DefaultAccount}" >> /etc/profile.d/jupyter-env.sh
             echo "export SSO_URL=${SsoUrl}" >> /etc/profile.d/jupyter-env.sh
             echo "export SSO_REGION=${SsoRegion}" >> /etc/profile.d/jupyter-env.sh
 
