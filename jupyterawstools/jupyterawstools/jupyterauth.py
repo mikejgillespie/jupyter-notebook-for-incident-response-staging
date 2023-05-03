@@ -30,7 +30,8 @@ aws_region = os.environ.get('SSO_REGION', '')
 
 linked_roles_str = os.environ.get('LINKED_ROLES', '')
 linked_roles = linked_roles_str.split(',') if linked_roles_str != "" else []
-default_role = os.environ.get('DEFAULT_ROLE', ''  if len(linked_roles)==0 else linked_roles[0])
+default_role = os.environ.get('DEFAULT_ROLE', '')
+default_account = os.environ.get('DEFAULT_ACCOUNT', '')
 
 auth_type = "DEFAULT"
 if sso_start_url != "":
@@ -38,7 +39,7 @@ if sso_start_url != "":
 elif len(linked_roles) > 0:
     auth_type = "ASSUME_ROLE"
 
-#auth_type = "ASSUME_ROLE"
+auth_type = "ASSUME_ROLE"
 #auth_type = "DEFAULT"
 #default_account = "383086473915"
 #default_role = "Jupyter-IR-ViewOnly"
@@ -50,6 +51,7 @@ def parse_role_arn(arn):
 
 def login(force_login = False):
     global default_role
+    global default_account
     
     """
     login does creates an SSO session for the current user. If a session already exists, it will
@@ -67,26 +69,30 @@ def login(force_login = False):
         sso_login(force_login)  
         
         if default_role == '' and len(linked_roles) > 0:
-            default_role = linked_roles[0]
+            arn_account, default_role = parse_role_arn(linked_roles[0])
             
-        account_id, permission_set = parse_role_arn(default_role)
-        init_profiles(permission_set, account_id)
-        os.environ["AWS_PROFILE"] = f"{permission_set}-{account_id}"
-        
+        if default_account == '' and len(linked_roles) > 0:
+            default_account, permission_set2 = parse_role_arn(linked_roles[0])
+
+            
+        init_profiles(default_role, default_account)
+        os.environ["AWS_PROFILE"] = f"{default_role}-{default_account}"
+      
 
     elif auth_type == "ASSUME_ROLE":
         
         if default_role == '' and len(linked_roles) > 0:
-            default_role = linked_roles[0]
+            arn_account, default_role = parse_role_arn(linked_roles[0])
+            
+        if default_account == '' and len(linked_roles) > 0:
+            default_account, permission_set2 = parse_role_arn(linked_roles[0])
         
-        account_id, role_name = parse_role_arn(default_role)
-        
-        print(f'Use role assumption: Default {default_role}')
+        print(f'Use role assumption: Default {default_role} {linked_roles}')
         
         my_session = boto3.session.Session()
         my_region = my_session.region_name
-        init_profiles_assume_role(role_name, account_id, my_region)
-        os.environ["AWS_PROFILE"] = f"{role_name}-{account_id}"
+        init_profiles_assume_role(default_role, default_account, my_region)
+        os.environ["AWS_PROFILE"] = f"{default_role}-{default_account}"
         
     else:
         print('Using default profile')

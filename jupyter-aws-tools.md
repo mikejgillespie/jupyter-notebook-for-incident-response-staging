@@ -2,12 +2,9 @@
 The AWS Tools is a library that makes it easier to work with Jupyter Notebooks in an AWS environment, simplyfing the code needed to run many common tasks in Jupyter.
 
 1. **Athena**: The athena library simplifies working with Athena by allowing for SQL commands to be passed to Athena with parameters, use of Named Queries, and returning the results as a Pandas dataframe.
+1. **Authentication**: The **jupyterauth** module provides a streamlined way to integrate AWS IAM permissions into Jupyter notebooks with Instance Profiles, IAM Role Assumption, or IAM Identity Center (SSO) configurations.
+1. **Opinionated**: The configuration of the AWS account and organization is opionated in order to allow the same scripts to be executed across many accounts. A CloudFormation template is included to configure the management account to have the proper account setup.
 
-* **Opinionated**: The configuration of the AWS account and organization is opionated in order to allow the same scripts to be executed across many accounts. A CloudFormation template is included to configure the management account to have the proper account setup.
-
-* **Multi-account**: The runbooks can be configured to run in a single or multi-account mode.
-
-* **Notebook Server** The notebooks in this repositiry can use either SageMaker Notebooks or local Jupyter notebooks. A CloudFormation template is included to create a SageMaker Notebook server with the proper permissions.  
 
 # Option 1: Quick Start
 The quick start will provide access to a SageMaker Jupyter notebook that downloads the notebook files in this repository. Once the notebook is available, it will be accessible through the SageMaker console. **Note**: The quick start only provides read-only access and Athena query access to AWS. If a notebook has remediatiation step, the notebook will not have permissions unless explicitly granted.
