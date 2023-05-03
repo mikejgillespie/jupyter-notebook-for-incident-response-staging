@@ -68,7 +68,7 @@ Resources:
             source /home/ec2-user/anaconda3/bin/activate "$ENVIRONMENT"
             rm  /home/ec2-user/anaconda3/envs/python3/bin/aws
             pip install --upgrade "$PACKAGE"
-            pip install -e /home/ec2-user/SageMaker/aws-incident-response-playbooks/jupyter/jupyterawstools
+            pip install -e /home/ec2-user/SageMaker/aws-incident-response-playbooks/jupyterawstools
             source /home/ec2-user/anaconda3/bin/deactivate
 
 
