@@ -134,6 +134,8 @@ def get_session_by_account(role=''):
         session = get_session(principal_name,account_id)
         result.append([session, account_id])
     else:
+        if role == '':
+            role = default_role
         for role_arn in linked_roles:
             account, assumed_role = parse_role_arn(role_arn)
             
