@@ -8,7 +8,8 @@ There are two ways to configure the notebook server for multiple account access.
 To set IAM Identity Center permissions, provide values for the **SsoRegion** and **SsoUrl** parameters:
 * **SsoRegion**: The region the SSO instance is running
 * **SsoUrl**: The URL to connect to the SSO instance
-* **DefaultRole**: The ARN of the role this notebook server should default to in the format: arn:aws:iam::AWS_ACCOUNTID:role/PERMISSION_SET_NAME
+* **DefaultRole**: The name role this notebook server should default
+* **DefaultAccount**: The 12 digit AWS account ID the notebook server should default
 
 ```
 aws cloudformation deploy --capabilities CAPABILITY_IAM --template-file jupyter-instance.yaml --parameter-overrides SsoRegion=<SSO_REGION> SsoUrl=<SSO_URL> DefaultRole=PERMISSION_SET_NAME DefaultAccount=012345678912 --stack-name sso-jupyter-notebook
@@ -16,7 +17,8 @@ aws cloudformation deploy --capabilities CAPABILITY_IAM --template-file jupyter-
 ## IAM Role Assumption
 Alternatively, provide the roles that this instance will have access to assume
 * **LinkedRoles**: A comma separated list of the ARN of roles this notebook server has access to
-* **DefaultRole**: The ARN of the role this notebook server should default to
+* **DefaultRole**: The name role this notebook server should default
+* **DefaultAccount**: The 12 digit AWS account ID the notebook server should default
 
 ```
 aws cloudformation deploy --capabilities CAPABILITY_IAM --template-file jupyter-instance.yaml --parameter-overrides LinkedRoles=arn1,arn2,arn3 DefaultRole=ROLE_NAME DefaultAccount=012345678912 --stack-name sso-jupyter-notebook
