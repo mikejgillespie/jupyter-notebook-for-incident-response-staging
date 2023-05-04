@@ -158,8 +158,11 @@ def get_session(permission_set='', account_id='', region_name='us-east-1'):
     if auth_type=="DEFAULT":
         return boto3.session.Session();
     
-    if permission_set == '' and account_id == '':
-        account_id, permission_set = parse_role_arn(default_role)
+    if account_id == '':
+        account_id = default_account
+    
+    if permission_set == '':
+        permission_set = default_role
         
     profile = f"{permission_set}-{account_id}"
     
