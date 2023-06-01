@@ -68,16 +68,27 @@ Resources:
             echo "export SSO_REGION=${SsoRegion}" >> /etc/profile.d/jupyter-env.sh
 
             sudo -u ec2-user -i <<'EOF'
-
+            
             ENVIRONMENT=python3
             source /home/ec2-user/anaconda3/bin/activate "$ENVIRONMENT"
             rm  /home/ec2-user/anaconda3/envs/python3/bin/aws
-            pip install --upgrade "$PACKAGE"
             pip install -e /home/ec2-user/SageMaker/jupyter-notebook-for-incident-response-staging/jupyterawstools
             source /home/ec2-user/anaconda3/bin/deactivate
 
 
             EOF
+
+
+            source /home/ec2-user/anaconda3/bin/activate JupyterSystemEnv
+
+            curl https://sh.rustup.rs -sSf | sh -s -- -y
+            export PATH=$PATH:~/.cargo/bin
+
+            pip install amazon-codewhisperer-jupyterlab-ext
+            jupyter server extension enable amazon_codewhisperer_jupyterlab_ext
+            
+            source /home/ec2-user/anaconda3/bin/deactivate
+
 
             echo "Restarting the Jupyter server.."
             systemctl restart jupyter-server
@@ -130,6 +141,15 @@ Resources:
                   - "logs:DescribeLogStreams"
                   - "logs:PutLogEvents"
                   - "logs:GetLogEvents"
+                Resource: 
+                - '*'
+        - PolicyName: codewhisperer
+          PolicyDocument: 
+            Version: "2012-10-17"
+            Statement: 
+              - Effect: "Allow"
+                Action: 
+                  - "codewhisperer:GenerateRecommendations"
                 Resource: 
                 - '*'
 
